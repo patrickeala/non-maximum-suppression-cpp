@@ -1,6 +1,3 @@
-// Martin Kersner, m.kersner@gmail.com
-// 2016/12/19 
-
 #ifndef UTILS_HPP__
 #define UTILS_HPP__ 
 

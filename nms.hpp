@@ -1,6 +1,3 @@
-// Martin Kersner, m.kersner@gmail.com
-// 2016/12/18
-
 #ifndef NMS_HPP__
 #define NMS_HPP__
 
@@ -8,7 +5,7 @@
 #include <numeric>
 #include <opencv2/opencv.hpp>
 
-enum PointInRectangle {XMIN, YMIN, XMAX, YMAX};
+enum PointInRectangle {CONF, XMIN, YMIN, XMAX, YMAX};
 
 std::vector<cv::Rect> nms(const std::vector<std::vector<float>> &,
                           const float &);

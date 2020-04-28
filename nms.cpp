@@ -1,7 +1,3 @@
-// Martin Kersner, m.kersner@gmail.com
-// 2016/12/18
-// C++ version of http://www.pyimagesearch.com/2015/02/16/faster-non-maximum-suppression-python/
-
 #include "nms.hpp"
 using std::vector;
 using cv::Rect;
@@ -14,6 +10,7 @@ vector<Rect> nms(const vector<vector<float>> & boxes,
   	return vector<Rect>();
   
   // grab the coordinates of the bounding boxes
+  auto conf = GetPointFromRect(boxes,CONF);
   auto x1 = GetPointFromRect(boxes, XMIN);
   auto y1 = GetPointFromRect(boxes, YMIN);
   auto x2 = GetPointFromRect(boxes, XMAX);
@@ -22,7 +19,7 @@ vector<Rect> nms(const vector<vector<float>> & boxes,
   // compute the area of the bounding boxes and sort the bounding
   // boxes by the bottom-right y-coordinate of the bounding box
   auto area = ComputeArea(x1, y1, x2, y2);
-  auto idxs = argsort(y2);
+  auto idxs = argsort(conf);
   
   int last;
   int i;
@@ -216,7 +213,7 @@ vector<Rect> BoxesToRectangles(const vector<vector<float>> & boxes)
   vector<float> box;
   
   for (const auto & box: boxes)
-    rectangles.push_back(Rect(Point(box[0], box[1]), Point(box[2], box[3])));
+    rectangles.push_back(Rect(Point(box[1], box[2]), Point(box[3], box[4])));
   
   return rectangles;
 }

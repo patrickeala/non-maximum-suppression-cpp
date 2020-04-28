@@ -1,12 +1,9 @@
-// Martin Kersner, m.kersner@gmail.com
-// 2016/12/19 
-
 #include "utils.hpp"
 using std::vector;
 
 cv::Rect VecToRect(const vector<float> & vec)
 {
-  return cv::Rect(cv::Point(vec[0], vec[1]), cv::Point(vec[2], vec[3]));
+  return cv::Rect(cv::Point(vec[1], vec[2]), cv::Point(vec[3], vec[4]));
 }
 
 void DrawRectangles(cv::Mat & img,
