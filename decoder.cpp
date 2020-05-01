@@ -30,6 +30,17 @@ int main(){
     cout << "\n";
   }
 
+  y_pred_decoded_raw = 
+
+
+
+
+
+
+
+
+
+
   // while (!myReadFile.eof()){
   //   for(int i = 0; i < 1; i++){
   //     vector<float> tmpVec;
