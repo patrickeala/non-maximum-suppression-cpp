@@ -24,21 +24,35 @@ int main()
 
   ifstream myReadFile;
   myReadFile.open("tflite_y_pred_before_nms.txt");
-  vector<vector<float>> boxes;
-
+  vector<vector<float>> boxes(52,vector<float>(5));
+  
   while (!myReadFile.eof()){
-    for(int i = 0; i < 1; i++){
-      vector<float> tmpVec;
-      float tmpFloat;
-
+    for(int i = 0; i < 52; i++){
       for (int j = 0; j < 5; j++){
-        myReadFile  >> tmpFloat;
-        tmpVec.push_back(tmpFloat);
+        myReadFile >> boxes[i][j];
       }
-      boxes.push_back(tmpVec);
     }
   }
+  for(int i = 0; i<52; i++) {
+    for(int j = 0; j<5; j++) {
+      cout << '(' << boxes[i][j] << ")";
+    }
+    cout << "\n";
+  }
 
+  // vector<vector<float>> boxes;
+  // while (!myReadFile.eof()){
+  //   for(int i = 0; i < 1; i++){
+  //     vector<float> tmpVec;
+  //     float tmpFloat;
+  //     for (int j = 0; j < 5; j++){
+  //       myReadFile  >> tmpFloat;
+  //       tmpVec.push_back(tmpFloat);
+  //     }
+  //     boxes.push_back(tmpVec);
+  //   }
+  // }
+  cout << "shape of boxes: (" << boxes[0].size() << "," << sizeof(boxes).size() << ")\n";
   // vector<vector<float> > rectangles =
   // {
   //   {300, 300, 400, 400},
