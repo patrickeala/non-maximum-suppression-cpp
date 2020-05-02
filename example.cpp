@@ -25,7 +25,9 @@ int main()
   ifstream myReadFile;
   myReadFile.open("tflite_y_pred_before_nms.txt");
   vector<vector<float>> boxes(52,vector<float>(5));
-  
+
+
+
   while (!myReadFile.eof()){
     for(int i = 0; i < 52; i++){
       for (int j = 0; j < 5; j++){
@@ -52,7 +54,7 @@ int main()
   //     boxes.push_back(tmpVec);
   //   }
   // }
-  cout << "shape of boxes: (" << boxes[0].size() << "," << sizeof(boxes).size() << ")\n";
+  // cout << "shape of boxes: (" << boxes[0].size() << "," << sizeof(boxes).size() << ")\n";
   // vector<vector<float> > rectangles =
   // {
   //   {300, 300, 400, 400},
@@ -69,6 +71,7 @@ int main()
   
   // after
   vector<Rect> reducedRectangle = nms(boxes, threshold);
+  // cout << reducedRectangle << endl;
   DrawRectangles(imgAfter, reducedRectangle);
   imshow("After", imgAfter);
   

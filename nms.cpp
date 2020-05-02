@@ -1,7 +1,9 @@
+#include <iostream>
 #include "nms.hpp"
 using std::vector;
 using cv::Rect;
 using cv::Point;
+using namespace std;
 
 vector<Rect> nms(const vector<vector<float>> & boxes,
                  const float & threshold)
@@ -226,6 +228,5 @@ vector<T> FilterVector(const vector<T> & vec,
   
   for (const auto & idx: idxs)
     resultVec.push_back(vec[idx]);
-  
   return resultVec;
 }
