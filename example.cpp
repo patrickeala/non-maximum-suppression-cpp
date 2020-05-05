@@ -1,6 +1,6 @@
 #include <iostream>
 #include <fstream>
-
+#include <chrono> 
 #include <vector>
 #include <opencv2/opencv.hpp>
 
@@ -9,6 +9,7 @@
 
 using namespace cv;
 using namespace std;
+using namespace std::chrono; 
 
 int main()
 {
@@ -35,12 +36,14 @@ int main()
       }
     }
   }
-  for(int i = 0; i<52; i++) {
-    for(int j = 0; j<5; j++) {
-      cout << '(' << boxes[i][j] << ")";
-    }
-    cout << "\n";
-  }
+
+
+  // for(int i = 0; i<52; i++) {
+    // for(int j = 0; j<5; j++) {
+      // cout << '(' << boxes[i][j] << ")";
+    // }
+    // cout << "\n";
+  // }
 
   // vector<vector<float>> boxes;
   // while (!myReadFile.eof()){
@@ -67,13 +70,21 @@ int main()
 
   // before
   DrawRectangles(imgBefore, boxes);
-  imshow("Before", imgBefore);
+  // imshow("Before", imgBefore);
   
   // after
+  auto start = high_resolution_clock::now();
+
   vector<Rect> reducedRectangle = nms(boxes, threshold);
+  auto stop = high_resolution_clock::now();
+  auto duration = duration_cast<nanoseconds>(stop - start); 
+  cout << "C++ NMS duration: " << duration.count() << endl; 
+  
+
+
   // cout << reducedRectangle << endl;
   DrawRectangles(imgAfter, reducedRectangle);
-  imshow("After", imgAfter);
+  // imshow("After", imgAfter);
   
-  waitKey(0);
+  // waitKey(0);
 }

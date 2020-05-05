@@ -50,7 +50,6 @@ int main()
   MatrixXf y_pred_decoded_raw(y_pred_rows,y_pred_cols-8);
 
   //Extracting into eigen matrix
-  auto start = high_resolution_clock::now(); 
   while (!myReadFile.eof()){
     for(int i = 0; i < y_pred_rows; i++){
       for (int j = 0; j < y_pred_cols; j++){
@@ -60,10 +59,9 @@ int main()
       }
     }
   }
-  auto stop = high_resolution_clock::now();
 
-  auto duration = duration_cast<microseconds>(stop - start); 
-  
+  auto start = high_resolution_clock::now(); 
+
   // To get the value of duration use the count() 
   // member function on the duration object 
   // cout << y_pred << endl;
@@ -98,7 +96,7 @@ int main()
 
 
   // cout << y_pred_decoded_raw << endl;
-	cout << "n_classes: " << n_classes << endl;
+	// cout << "n_classes: " << n_classes << endl;
 	Matrix <float, Dynamic, 5> pred;
 	for (int class_id = 1; class_id < n_classes; class_id++){
 
@@ -125,7 +123,7 @@ int main()
 		if(thresh_rows!=0){
 			int pred_rows = pred.rows(); 		
 
-			cout << "trying to append " << class_id << endl;
+			// cout << "trying to append " << class_id << endl;
 			MatrixXf tmp(pred_rows + thresh_rows,5);
 			tmp << pred, threshold_met;
 			// pred.conservativeResize(pred_rows + thresh_rows, NoChange);
@@ -133,46 +131,59 @@ int main()
 			pred = tmp;
 		}
 	}
-	cout << pred << endl;
-	cout << "pred shape: (" << pred.rows() << "," << pred.cols() << ")\n";
+	// cout << pred << endl;
+	// cout << "pred shape: (" << pred.rows() << "," << pred.cols() << ")\n";
 
 	// convert threshold met to 2D vec
-	// vector<vector<float>> boxes(pred.rows(),vector<float>(5));
+	auto conv_start = high_resolution_clock::now(); 
+
 	vector<vector<float>> boxes(pred.rows(),vector<float>(5));
+	float array[pred.rows()][5];
 
-	// for (int i=0; i<pred.rows(); ++i){
-    	// const float* begin = &pred.row(i).data()[0];
-    	// boxes.push_back(vector<float>(begin, begin+pred.cols()));
-	// }
-	// Eigen::Map<MatrixXf>(&boxes[0][0], 52, 5) = pred;
-	for(int i = 0; i<52; i++) {
-    	for(int j = 0; j<5; j++) {
-      		boxes[i][j] = pred[i][j];
-    	}
-  	}
+	// converted to array
+	for (int i=0 ; i<pred.rows() ; i++){
+		Map<RowVectorXf>(&array[i][0], 1, 5) = pred.row(i);
+	}
+	// converted to 2dvec
+    for(int i = 0; i < pred.rows(); i++){
+      for (int j = 0; j < 5; j++){
+        boxes[i][j] = array[i][j];
+      }
+    }
+	auto conv_stop = high_resolution_clock::now();
+	auto conv_duration = duration_cast<nanoseconds>(conv_stop - conv_start); 
+	cout << "Conversion duration: " << conv_duration.count()/1e+6 << "ms" << endl;
 
-	for(int i = 0; i<52; i++) {
-    	for(int j = 0; j<5; j++) {
-      	cout << " " << boxes[i][j] << " ";
-    	}
-    	cout << "\n";
-  	}
+	// for(int i = 0; i<52; i++) {
+    // 	for(int j = 0; j<5; j++) {
+    //   		cout << boxes[i][j] << "   ";
+    // 	}
+    // 	cout << "\n";
+  	// }
 
-	// // initialization
+	// initialization
+
+  	float threshold	= 0.5;
+
+	
+	vector<Rect> reducedRectangle = nms(boxes, threshold);
+
 	// Mat imgBefore(Size(500, 500), DataType<float>::type);
   	// // Mat imgBefore("silicon_valley.jpg");
 
-  	// Mat imgAfter = imgBefore.clone();
-  	// float threshold	= 0.5;
+  	// Mat imgAfter = imgBefore.clone();	
 	// DrawRectangles(imgBefore, boxes);
 	// imshow("Before", imgBefore);
-	
-	// // after
-	// vector<Rect> reducedRectangle = nms(boxes, threshold);
 	// DrawRectangles(imgAfter, reducedRectangle);
 	// imshow("After", imgAfter);
 	
 	// waitKey(0);
+
+	auto stop = high_resolution_clock::now();
+	auto duration = duration_cast<nanoseconds>(stop - start); 
+	cout << "C++ Decoder duration: " << duration.count()/1e+6 << "ms" << endl; 
+	cout << "C++ Decoder w/out conversion: " << (duration.count() - conv_duration.count())/1e+6 << "ms" << endl; 
+  
 
 }
 
