@@ -1,15 +1,13 @@
 #include "dec.hpp"
 
 MatrixXf convert_coordinates(const MatrixXf & matrix){
-	// cout << "Starting cc\n";
 	MatrixXf converted = matrix;
 	int start_index = matrix.cols();
-	// cout << "Received converted\n";
 	converted.col(start_index-4) = matrix.col(start_index-4) - matrix.col(start_index-2) / 2;
 	converted.col(start_index-3) = matrix.col(start_index-3) - matrix.col(start_index-1) / 2;
 	converted.col(start_index-2) = matrix.col(start_index-4) + matrix.col(start_index-2) / 2;
 	converted.col(start_index-1) = matrix.col(start_index-3) + matrix.col(start_index-1) / 2;
-	// cout << "Finishing cc\n";
+	cout << "Finishing cc\n";
 	return converted;
 }
 

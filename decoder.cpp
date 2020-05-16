@@ -4,7 +4,6 @@
 #include <fstream>
 #include <vector>
 #include <opencv2/opencv.hpp>
-#include <typeinfo>
 
 #include "utils.hpp"
 #include "nms.hpp"
