@@ -68,14 +68,7 @@ int main()
   myReadFile.open("tflite_y_pred_before_nms.txt");
 
 
-  while (!myReadFile.eof()){
-    for(int i = 0; i < nms_rows; i++){
-      for (int j = 0; j < nms_cols; j++){
-        myReadFile >> vec_boxes(i,j);
-        // myReadFile >> boxes[i][j];
-      }
-    }
-  }
+
   while (!myReadFile.eof()){
     for(int i = 0; i < nms_rows; i++){
       for (int j = 0; j < nms_cols; j++){
@@ -95,6 +88,15 @@ int main()
   DrawRectangles(imgAfter, reducedRectangle);
   imshow("NMS", imgAfter);
 
+
+  while (!myReadFile.eof()){
+    for(int i = 0; i < nms_rows; i++){
+      for (int j = 0; j < nms_cols; j++){
+        myReadFile >> vec_boxes(i,j);
+        // myReadFile >> boxes[i][j];
+      }
+    }
+  }
 
   auto vec_start = high_resolution_clock::now();
   vector<Rect> vectorized_reducedRectangle = vectorized_nms(vec_boxes, threshold);
