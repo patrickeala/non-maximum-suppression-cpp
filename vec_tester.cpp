@@ -79,14 +79,15 @@ int main()
 	vector<Rect> vectorized_reducedRectangle;
 
   auto vec_start = high_resolution_clock::now();
-	
-	for(int i=0; i<1000000; i++){
+
+	for(int i=0; i<10000; i++){
   	vectorized_reducedRectangle = vectorized_nms(vec_boxes, threshold);
 	}
 
   auto vec_stop = high_resolution_clock::now();
-  auto vec_duration = duration_cast<nanoseconds>(vec_stop - vec_start); 
-  cout << "C++ vectorized_nms duration: " << vec_duration.count() << endl;   
+  auto vec_duration = duration_cast<milliseconds>(vec_stop - vec_start);
+	// float vec_time = vec_duration.count()/1000000;
+  cout << "C++ vectorized_nms duration: " << vec_duration.count() << "ms" << endl;   
   DrawRectangles(imgAfter, vectorized_reducedRectangle);
   imshow("Vectorized NMS", imgAfter);
 

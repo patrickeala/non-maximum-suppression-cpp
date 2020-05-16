@@ -81,13 +81,14 @@ int main()
 
   auto start = high_resolution_clock::now();
 	
-	for (int i=0; i<1000000; i++){
+	for (int i=0; i<10000; i++){
 		reducedRectangle = nms(boxes, threshold);
 	}
   
   auto stop = high_resolution_clock::now();
-  auto duration = duration_cast<nanoseconds>(stop - start); 
-  cout << "C++ nms duration: " << duration.count() << endl; 
+  auto duration = duration_cast<milliseconds>(stop - start); 
+	// float time = duration.count()/1000000;
+  cout << "C++ nms duration: " << duration.count() << "ms" << endl; 
   DrawRectangles(imgAfter, reducedRectangle);
   imshow("NMS", imgAfter);
 
