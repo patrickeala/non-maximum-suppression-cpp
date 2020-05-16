@@ -1,15 +1,22 @@
 #include <iostream>
 #include <fstream>
-#include <chrono> 
+#include <Eigen/Dense>
+#include <chrono>
 #include <vector>
 #include <opencv2/opencv.hpp>
 
 #include "utils.hpp"
+#include "vectorized_nms.hpp"
+#include "dec.hpp"
 #include "nms.hpp"
+
+
 
 using namespace cv;
 using namespace std;
-using namespace std::chrono; 
+using namespace std::chrono;
+using namespace Eigen;
+
 
 int main()
 {
@@ -21,70 +28,96 @@ int main()
   float threshold	= 0.5;
 
 
-  // Extracting bounding boxes from .txt file
+	// const int y_pred_rows = 2006;
+	// const int y_pred_cols = 33;
 
+
+
+  // MatrixXf y_pred(y_pred_rows, y_pred_cols);
+  // ifstream myReadFile;
+  // myReadFile.open("tflite_y_pred_raw.txt");
+
+  // while (!myReadFile.eof()){
+  //   for(int i = 0; i < y_pred_rows; i++){
+  //     for (int j = 0; j < y_pred_cols; j++){
+  //       // myReadFile >> y_pred[i][j];
+  //       myReadFile >> y_pred(i,j);
+  //     }
+  //   }
+  // }
+
+
+	// MatrixXf vec_boxes = decode_detections(y_pred, 0.3, 0.45, 200, 300, 300);
+
+  // before
+  // DrawRectangles(imgBefore, vec_boxes);
+  // imshow("Before", imgBefore);
+  
+
+
+
+  //
+  //  TESTING VECTORIZED NMS vs HARDCODED NMS
+  //
+	const int nms_rows = 52;
+	const int nms_cols = 5;
+
+  MatrixXf vec_boxes(nms_rows, nms_cols);
+  vector<vector<float>> boxes(nms_rows,vector<float>(nms_cols));
   ifstream myReadFile;
   myReadFile.open("tflite_y_pred_before_nms.txt");
-  vector<vector<float>> boxes(52,vector<float>(5));
-
 
 
   while (!myReadFile.eof()){
-    for(int i = 0; i < 52; i++){
-      for (int j = 0; j < 5; j++){
+    for(int i = 0; i < nms_rows; i++){
+      for (int j = 0; j < nms_cols; j++){
+        myReadFile >> vec_boxes(i,j);
+        // myReadFile >> boxes[i][j];
+      }
+    }
+  }
+  while (!myReadFile.eof()){
+    for(int i = 0; i < nms_rows; i++){
+      for (int j = 0; j < nms_cols; j++){
+        // myReadFile >> vec_boxes(i,j);
         myReadFile >> boxes[i][j];
       }
     }
   }
 
 
-  // for(int i = 0; i<52; i++) {
-    // for(int j = 0; j<5; j++) {
-      // cout << '(' << boxes[i][j] << ")";
-    // }
-    // cout << "\n";
-  // }
 
-  // vector<vector<float>> boxes;
-  // while (!myReadFile.eof()){
-  //   for(int i = 0; i < 1; i++){
-  //     vector<float> tmpVec;
-  //     float tmpFloat;
-  //     for (int j = 0; j < 5; j++){
-  //       myReadFile  >> tmpFloat;
-  //       tmpVec.push_back(tmpFloat);
-  //     }
-  //     boxes.push_back(tmpVec);
-  //   }
-  // }
-  // cout << "shape of boxes: (" << boxes[0].size() << "," << sizeof(boxes).size() << ")\n";
-  // vector<vector<float> > rectangles =
-  // {
-  //   {300, 300, 400, 400},
-  //   {320, 320, 420, 420},
-  //   {295, 259, 415, 415},
-  //   {100, 100, 150, 150},
-  //   {90,  90,  180, 180},
-  //   {112, 112, 170, 170}
-  // };
-
-  // before
-  DrawRectangles(imgBefore, boxes);
-  // imshow("Before", imgBefore);
-  
-  // after
   auto start = high_resolution_clock::now();
-
   vector<Rect> reducedRectangle = nms(boxes, threshold);
   auto stop = high_resolution_clock::now();
   auto duration = duration_cast<nanoseconds>(stop - start); 
-  cout << "C++ NMS duration: " << duration.count() << endl; 
-  
-
-
-  // cout << reducedRectangle << endl;
+  cout << "C++ nms duration: " << duration.count() << endl; 
   DrawRectangles(imgAfter, reducedRectangle);
-  // imshow("After", imgAfter);
+  imshow("NMS", imgAfter);
+
+
+  auto vec_start = high_resolution_clock::now();
+  vector<Rect> vectorized_reducedRectangle = vectorized_nms(vec_boxes, threshold);
+  auto vec_stop = high_resolution_clock::now();
+  auto vec_duration = duration_cast<nanoseconds>(vec_stop - vec_start); 
+  cout << "C++ vectorized_nms duration: " << vec_duration.count() << endl; 
+  DrawRectangles(imgAfter, vectorized_reducedRectangle);
+  imshow("Vectorized NMS", imgAfter);
   
-  // waitKey(0);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  waitKey(0);
 }

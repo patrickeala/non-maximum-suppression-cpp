@@ -49,13 +49,13 @@ int main(){
 
 
 
-  MatrixXd mat(3,4);
-  mat << 1,2,3,4,
-         5,6,7,8,
-         9,10,11,12;
-  MatrixXd ext;
-  ext = (mat.col(0).array() > 4).select(mat.row(), 0);
-  cout << ext << endl;
+  // MatrixXd mat(3,4);
+  // mat << 1,2,3,4,
+  //        5,6,7,8,
+  //        9,10,11,12;
+  // MatrixXd ext;
+  // ext = (mat.col(0).array() > 4).select(mat.row(), 0);
+  // cout << ext << endl;
 
 
 
