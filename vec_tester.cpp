@@ -63,30 +63,8 @@ int main()
 	const int nms_cols = 5;
 
   MatrixXf vec_boxes(nms_rows, nms_cols);
-  vector<vector<float>> boxes(nms_rows,vector<float>(nms_cols));
   ifstream myReadFile;
   myReadFile.open("tflite_y_pred_before_nms.txt");
-
-
-
-  while (!myReadFile.eof()){
-    for(int i = 0; i < nms_rows; i++){
-      for (int j = 0; j < nms_cols; j++){
-        // myReadFile >> vec_boxes(i,j);
-        myReadFile >> boxes[i][j];
-      }
-    }
-  }
-
-
-
-  auto start = high_resolution_clock::now();
-  vector<Rect> reducedRectangle = nms(boxes, threshold);
-  auto stop = high_resolution_clock::now();
-  auto duration = duration_cast<nanoseconds>(stop - start); 
-  cout << "C++ nms duration: " << duration.count() << endl; 
-  DrawRectangles(imgAfter, reducedRectangle);
-  imshow("NMS", imgAfter);
 
 
   while (!myReadFile.eof()){
@@ -98,28 +76,19 @@ int main()
     }
   }
 
+	vector<Rect> vectorized_reducedRectangle;
+
   auto vec_start = high_resolution_clock::now();
-  vector<Rect> vectorized_reducedRectangle = vectorized_nms(vec_boxes, threshold);
+	
+	for(int i=0; i<1000000; i++){
+  	vectorized_reducedRectangle = vectorized_nms(vec_boxes, threshold);
+	}
+
   auto vec_stop = high_resolution_clock::now();
   auto vec_duration = duration_cast<nanoseconds>(vec_stop - vec_start); 
-  cout << "C++ vectorized_nms duration: " << vec_duration.count() << endl; 
+  cout << "C++ vectorized_nms duration: " << vec_duration.count() << endl;   
   DrawRectangles(imgAfter, vectorized_reducedRectangle);
   imshow("Vectorized NMS", imgAfter);
-  
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
   waitKey(0);
 }

@@ -7,7 +7,6 @@ MatrixXf convert_coordinates(const MatrixXf & matrix){
 	converted.col(start_index-3) = matrix.col(start_index-3) - matrix.col(start_index-1) / 2;
 	converted.col(start_index-2) = matrix.col(start_index-4) + matrix.col(start_index-2) / 2;
 	converted.col(start_index-1) = matrix.col(start_index-3) + matrix.col(start_index-1) / 2;
-	cout << "Finishing cc\n";
 	return converted;
 }
 
