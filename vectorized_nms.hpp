@@ -14,6 +14,8 @@ using cv::Rect;
 using cv::Point;
 using namespace std;
 using namespace Eigen;
+using namespace std::chrono;
+
 
 vector<Rect> vectorized_nms(const MatrixXf & boxes, const float & iou_thresh);
 

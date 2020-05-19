@@ -20,12 +20,6 @@ vector<Rect> vectorized_nms(const MatrixXf & pred, const float & iou_threshold){
 	// FIX THIS: ARGSORT CONF TO GET IDXS
 
 	VectorXi idxs = argsort_eigen(conf);
-	// No need to sort confs
-	// sort(conf.data(),conf.data()+conf.size());
-
-
-	// cout << "conf:\n" << conf << endl;
-	// cout << "idxs:\n" << idxs << endl;
 
 
 	// BEGIN NMS LOOP
@@ -122,8 +116,6 @@ vector<Rect> vectorized_nms(const MatrixXf & pred, const float & iou_threshold){
 //
 //	Conversion to array
 //
-
-
 	vector<vector<float>> final_boxes(n_finalboxes,vector<float>(5));
 	float array_final[n_finalboxes][5];
 
@@ -132,18 +124,12 @@ vector<Rect> vectorized_nms(const MatrixXf & pred, const float & iou_threshold){
 		Map<RowVectorXf>(&array_final[i][0], 1, 5) = filtered.row(i);
 	}
 	// converted to 2dvec
-    for(int i = 0; i < n_finalboxes; i++){
-      for (int j = 0; j < 5; j++){
-        final_boxes[i][j] = array_final[i][j];
-      }
-    }
+	for(int i = 0; i < n_finalboxes; i++){
+		for (int j = 0; j < 5; j++){
+		final_boxes[i][j] = array_final[i][j];
+		}
+	}
 
-	// for (int i=0; i<n_finalboxes; i++){
-	// 	for (int j=0; j<5; j++){
-	// 		cout << final_boxes[i][j] << " ";
-	// 	}
-	// 	cout << "\n";
-	// }
 
     auto boxes_rect = VecBoxesToRectangles(final_boxes);
 
@@ -170,10 +156,10 @@ void append_int_eigen(VectorXi & vect, int & value)
 }
 
 VectorXf extract_values(VectorXf & vec, VectorXi & idxs){
-	VectorXf resultVec;
-	for (int i=0; i<idxs.size(); i++){
-    	resultVec.conservativeResize(resultVec.rows()+1,NoChange);
-		// int a = idxs.data()[i];
+	int n_idxs = idxs.size();
+	VectorXf resultVec(n_idxs);
+	for (int i=0; i<n_idxs; i++){
+    	// resultVec.conservativeResize(resultVec.rows()+1,NoChange);
 		resultVec.row(i) << vec.row(idxs.data()[i]);
 	}
   return resultVec;

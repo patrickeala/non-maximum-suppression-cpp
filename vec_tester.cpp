@@ -81,7 +81,7 @@ int main()
   auto vec_start = high_resolution_clock::now();
 
 	for(int i=0; i<10000; i++){
-  	vectorized_reducedRectangle = vectorized_nms(vec_boxes, threshold);
+    vectorized_reducedRectangle = vectorized_nms(vec_boxes, threshold);
 	}
 
   auto vec_stop = high_resolution_clock::now();
