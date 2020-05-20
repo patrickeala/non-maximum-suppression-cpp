@@ -7,7 +7,7 @@
 
 #include "utils.hpp"
 #include "nms.hpp"
-#include "dec.hpp"
+#include "decoder.hpp"
 
 
 using namespace cv;

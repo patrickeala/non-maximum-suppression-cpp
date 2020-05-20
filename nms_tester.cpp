@@ -7,7 +7,7 @@
 
 #include "utils.hpp"
 #include "vectorized_nms.hpp"
-#include "dec.hpp"
+#include "decoder.hpp"
 #include "nms.hpp"
 
 
