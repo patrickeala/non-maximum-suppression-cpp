@@ -1,24 +1,10 @@
 #include <iostream>
-#include <fstream>
-#include <Eigen/Dense>
-#include <chrono>
-#include <vector>
-#include <opencv2/opencv.hpp>
-
-#include "utils.hpp"
 #include "nms.hpp"
-#include "decoder.hpp"
-
-
-using namespace cv;
+using std::vector;
+using cv::Rect;
+using cv::Point;
 using namespace std;
-using namespace std::chrono;
-using namespace Eigen;
-#include "nms.hpp"
 
-//
-//  NON-VECTORIZED NMS
-//
 vector<Rect> nms(const vector<vector<float>> & boxes,
                  const float & threshold)
 {
@@ -42,7 +28,6 @@ vector<Rect> nms(const vector<vector<float>> & boxes,
   vector<int> pick;
   
   // keep looping while some indexes still remain in the indexes list
-  int counter = 0;
   while (idxs.size() > 0) {
     // grab the last index in the indexes list and add the
     // index value to the list of picked indexes
@@ -70,11 +55,6 @@ vector<Rect> nms(const vector<vector<float>> & boxes,
     // delete all indexes from the index list that have
     auto deleteIdxs = WhereLarger(overlap, threshold);
     deleteIdxs.push_back(last);
-    // cout << "loop: " << counter << endl;
-    // for (int i=0; i<deleteIdxs.size(); i++){
-      // cout << deleteIdxs[i] << " ";
-    // }
-    // cout << "\n";
     idxs = RemoveByIndexes(idxs, deleteIdxs);
   }
 
@@ -250,4 +230,3 @@ vector<T> FilterVector(const vector<T> & vec,
     resultVec.push_back(vec[idx]);
   return resultVec;
 }
-

@@ -4,14 +4,6 @@
 #include <vector>
 #include <numeric>
 #include <opencv2/opencv.hpp>
-#include <Eigen/Dense>
-
-using std::vector;
-using cv::Rect;
-using cv::Point;
-using namespace std;
-using namespace Eigen;
-
 
 enum PointInRectangle {CONF, XMIN, YMIN, XMAX, YMAX};
 
