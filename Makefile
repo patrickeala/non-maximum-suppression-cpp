@@ -1,4 +1,4 @@
-all: nms.hpp
+all:
 	g++ -I /home/patrick/Downloads/eigen-3.3.7/ nms.cpp utils.cpp example.cpp `pkg-config opencv --cflags` `pkg-config opencv --libs` -std=c++14 -o example
 
 decoder:
